@@ -45,6 +45,7 @@ export default {
             this.submitted = true;
             const { username, password } = this;
             if (username && password) {
+                // console.log(username, password);
                 this.login({ username, password })
             }
         }

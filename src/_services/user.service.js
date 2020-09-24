@@ -8,6 +8,12 @@ export const userService = {
     getAll,
     getById,
     update,
+    createItem,
+    getAllItems,
+    createOrder,
+    getAllOrders,
+    editOrder,
+    editOrderItem,
     delete: _delete
 };
 
@@ -17,7 +23,6 @@ function login(username, password) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
     };
-
     return fetch(`${config.apiUrl}/users/authenticate`, requestOptions)
         .then(handleResponse)
         .then(user => {
@@ -101,4 +106,79 @@ function handleResponse(response) {
 
         return data;
     });
+}
+
+function createItem(item) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(item)
+    };
+    return fetch(`${config.apiUrl}/api/v1/item/`, requestOptions).then(handleResponse);
+}
+
+function getAllItems() {
+    const requestOptions = {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+    };
+    return fetch(`${config.apiUrl}/api/v1/item/`, requestOptions)
+        .then(handleResponse)
+        .then(data => {
+            return data.data;
+        });
+}
+
+function createOrder(item) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(item)
+    };
+    return fetch(`${config.apiUrl}/api/v1/order/`, requestOptions).then(handleResponse);
+}
+
+function getAllOrders(params) {
+    const requestOptions = {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+    };
+    let paramStr = `?`;
+    if (params){
+        paramStr += (params.status) ? `status=${params.status}`: ``;
+        paramStr += (params.customerphone) ? `&customerphone=${params.customerphone}`: ``;
+    }
+    return fetch(`${config.apiUrl}/api/v1/order/${paramStr}`, requestOptions)
+        .then(handleResponse)
+        .then(data => {
+            return data.data;
+        });
+}
+
+function editOrder(order, status) {
+    const requestOptions = {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status }),
+    };
+    return fetch(`${config.apiUrl}/api/v1/order/${order.orderid}`, requestOptions)
+        .then(handleResponse)
+        .then(data => {
+            return data.data;
+        });
+}
+
+function editOrderItem(oi, status) {
+    const requestOptions = {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status }),
+    };
+    console.log(requestOptions);
+    return fetch(`${config.apiUrl}/api/v1/order/${oi.orderid}/orderitems/${oi.orderitemid}`, requestOptions)
+        .then(handleResponse)
+        .then(data => {
+            console.log(data);
+            return data.data;
+        });
 }

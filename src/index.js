@@ -15,5 +15,8 @@ new Vue({
     el: '#app',
     router,
     store,
+    data: {
+      userCount: 0,
+    },
     render: h => h(App)
 });

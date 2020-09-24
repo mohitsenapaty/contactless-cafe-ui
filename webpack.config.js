@@ -1,9 +1,10 @@
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
 
 module.exports = {
     mode: 'development',
     resolve: {
-        extensions: ['.js', '.vue']
+        extensions: ['.js', '.vue'],
     },
     module: {
         rules: [
@@ -25,10 +26,15 @@ module.exports = {
     devServer: {
         historyApiFallback: true
     },
+    output: {
+        path: path.resolve(__dirname, './'),
+        publicPath: '/',
+        filename: 'main.js'
+    },
     externals: {
         // global app config object
         config: JSON.stringify({
-            apiUrl: 'http://localhost:4000'
+            apiUrl: 'http://127.0.0.1:1342'
         })
     }
 }

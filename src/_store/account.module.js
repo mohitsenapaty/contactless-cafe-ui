@@ -44,7 +44,45 @@ const actions = {
                     dispatch('alert/error', error, { root: true });
                 }
             );
-    }
+    },
+    createItem({ dispatch, commit }, item) {
+        commit('createItem', item);
+
+        userService.createItem(item)
+            .then(
+                item => {
+                    commit('itemCreationSuccess', item);
+                    router.push('/admin/items');
+                    setTimeout(() => {
+                        // display success message after route change completes
+                        dispatch('alert/success', 'Item creation successful', { root: true });
+                    })
+                },
+                error => {
+                    commit('itemCreationFailure', error);
+                    dispatch('alert/error', error, { root: true });
+                },
+            );
+    },
+    createOrder({ dispatch, commit }, order) {
+        commit('createOrder', order);
+
+        userService.createOrder(order)
+            .then(
+                item => {
+                    commit('orderCreationSuccess', order);
+                    router.push('/customer/orders');
+                    setTimeout(() => {
+                        // display success message after route change completes
+                        dispatch('alert/success', 'Order creation successful', { root: true });
+                    })
+                },
+                error => {
+                    commit('orderCreationFailure', error);
+                    dispatch('alert/error', error, { root: true });
+                },
+            );
+    },
 };
 
 const mutations = {
@@ -72,7 +110,25 @@ const mutations = {
     },
     registerFailure(state, error) {
         state.status = {};
-    }
+    },
+    createItem(state, item) {
+        state.status = { registering: true };
+    },
+    itemCreationSuccess(state, item) {
+        state.status = {};
+    },
+    itemCreationFailure(state, item) {
+        state.status = {};
+    },
+    createOrder(state, order) {
+        state.status = { registering: true };
+    },
+    orderCreationSuccess(state, order) {
+        state.status = {};
+    },
+    orderCreationFailure(state, order) {
+        state.status = {};
+    },
 };
 
 export const account = {
